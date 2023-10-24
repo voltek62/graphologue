@@ -626,10 +626,10 @@ export const Question = () => {
             ref={textareaRef}
             className="question-textarea"
             value={question}
-            placeholder={'ask a question'}
+            placeholder={'copy/paste your text'}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
-            rows={1}
+            rows={20}
           />
           <button
             disabled={!canAsk}

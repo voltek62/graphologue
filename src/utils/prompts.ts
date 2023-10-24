@@ -10,61 +10,62 @@ However, if the same entity has appeared in the original response, please match 
 /* --------------------------- prompts start here --------------------------- */
 /* -------------------------------------------------------------------------- */
 
+/*
+old:
+The paragraphs should cover the most important aspects of the answer, with each of them discussing one aspect or topic. \
+
+new:
+The paragraphs should cover all knowledge you know to answer in a comprehensive and informative way, even if they are open ended, challenging, or strange. \
+*/
+
+/*
+Please provide a well-structured response to the user's question in multiple paragraphs. \
+The paragraphs should cover all the knowledge you know in order to answer in a comprehensive and informative way, even if they are open-ended, challenging or strange. \ 
+Each paragraph should have fewer than 5 sentences, and your response should have fewer than 8 paragraphs in total. \
+The user’s goal is to construct a concept map to visually explain your response. \
+*/
+
 export const predefinedPrompts = {
   initialAsk: (question: string): Prompt[] => {
+    const filteredQuestion = question
+      .split('\n') // diviser en lignes
+      .filter(line => line.length >= 200) // filtrer les lignes de moins de 200 caractères
+      .join('\n') // regrouper les lignes
+
     return [
       {
         role: 'system',
-        content: `Please provide a well-structured response to the user's question in multiple paragraphs. \
-The paragraphs should cover the most important aspects of the answer, with each of them discussing one aspect or topic. \
-Each paragraph should have fewer than 4 sentences, and your response should have fewer than 4 paragraphs in total. \
-The user’s goal is to construct a concept map to visually explain your response. \
+        content: `Analyse the user's text composed of multiple paragraphs. \
+The user’s goal is to construct a concept map to visually explain the user's text. \
 To achieve this, annotate the key entities and relationships inline for each sentence in the paragraphs. \
 \
-Entities are usually noun phrases and should be annotated with [entity ($N1)], for example, [Artificial Intelligence ($N1)]. \
+Every entity is tagged as [entity ($N1)], for instance, [Artificial Intelligence ($N1)]. \
 Do not annotate conjunctive adverbs, such as "since then" or "therefore", as entities in the map. \
 \
-A relationship is usually a word or a phrase that consists of verbs, adjectives, adverbs, or prepositions, e.g., "contribute to", "by", "is", and "such as". \
-Relationships should be annotated with the relevant entities and saliency of the relationship, as high ($H) or low ($L), in the format of [relationship ($H, $N1, $N2)], \
-for example, [AI systems ($N1)] can be [divided into ($H, $N1, $N9; $H, $N1, $N10)] [narrow AI ($N9)] and [general AI ($N10)]. \
-Relationships of high saliency are those included in summaries. Relationships of low saliency are often omitted in summaries. \
-It's important to choose relationships that accurately reflect the nature of the connection between the entities in text, \
-and to use a consistent annotation format throughout the paragraphs. \
+Relationships should solely express the semantic linkage between entities. \
 \
-You should try to annotate at least one relationship for each entity. Relationships should only connect entities that appear in the response. \
-You can arrange the sentences in a way that facilitates the annotation of entities and relationships, \
-but the arrangement should not alter their meaning, and they should still flow naturally in language.
-
-Example paragraph A:
-[Artificial Intelligence (AI) ($N1)] [is a ($H, $N1, $N2)] [field of computer science ($N2)] that [creates ($H, $N1, $N3)] [intelligent machines ($N3)]. \
-[These machines ($N3)] [possess ($H, $N3, $N4)] [capabilities ($N4)] [such as ($L, $N4, $N5; $L, $N4, $N6; $L, $N4, $N7; $L, $N4, $N8)] \
-[learning ($N5)], \
-[reasoning ($N6)], \
-[perception ($N7)], \
-and [problem-solving ($N8)]. \
-[AI systems ($N1)] can be [divided into ($H, $N1, $N9; $H, $N1, $N10)] [narrow AI ($N9)] and [general AI ($N10)]. \
-[Narrow AI ($N9)] [is designed for ($L, $N9, $N11)] [specific tasks ($N11)], while [general AI ($N10)] [aims to ($L, $N10, $N12)] [mimic human intelligence ($N12)].
-
-Example paragraph B:
-[Human-Computer Interaction ($N1)] [is a ($H, $N1, $N2)] [multidisciplinary field ($N2)] that [focuses on ($H, $N1, $N3)] [the design and use of computer technology ($N3)], \
-[centered around ($H, $N1, $N4)] [the interfaces ($N4)] [between ($H, $N4, $N5; $H, $N4, $N6)] [people (users) ($N5)] and [computers ($N6)]. \
-[Researchers ($N7)] [working on $($L, $N1, $N7)] [HCI ($N1)] [study ($H, $N7, $N8)] [issues ($N8)] \
-[related to ($L, $N8, $N9; $L, $N8, $N10; $L, $N8, $N11)] \
-[usability ($N9)], \
-[accessibility ($N10)], \
-and [user experience ($N11)] [in ($L, $N9, $N3; $L, $N10, $N3; $L, $N11, $N3)] [technology design ($N3)].
-
-Example paragraph C:
-[Birds ($N1)] [can ($H, $N1, $N2)] [fly ($N2)] [due to ($H, $N2, $N3)] [a combination of physiological adaptations ($N3)]. \
-[One key ($H, $N3, $N4)] [adaptation ($N4)] [is ($H, $N4, $N5)] the [presence of lightweight bones ($N5)] that [reduce ($H, $N5, $N6)] [their body weight ($N6)], \
-[making ($L, $N5, $N7)] it [easier for them to fly ($N7)]. \
-[Another ($H, $N3, $N8)] [adaptation ($N8)] [is ($H, $N8, $N9)] the [structure of their wings ($N9)] which [are designed for ($H, $N9, $N2)] [flight ($N2)].
-
+Utilize the format [relationship ($H, $N1, $N2)] to detail these connections, like [AI ($N1)] [is a field of ($H, $N1, $N2)] [computer science ($N2)]. \
+\
+Focus on capturing the direct semantic connections between entities. \
+\
+Examples: \
+\
+Example A: \
+[Artificial Intelligence (AI) ($N1)] [is a field of ($H, $N1, $N2)] [computer science ($N2)]. \
+[AI ($N1)] [comprises types like ($H, $N1, $N9; $H, $N1, $N10)] [narrow AI ($N9)] and [general AI ($N10)]. \
+[Narrow AI ($N9)] [is designed for ($H, $N9, $N11)] [specific tasks ($N11)], whereas [general AI ($N10)] [aims to mimic ($H, $N10, $N12)] [human intelligence ($N12)]. \
+\
+Example B: \
+[Human-Computer Interaction (HCI) ($N1)] [is a ($H, $N1, $N2)] [multidisciplinary field ($N2)] that [concentrates on ($H, $N1, $N3)] [the design and use of computer technology ($N3)], especially concerning [interfaces ($N4)] [between ($H, $N4, $N5; $H, $N4, $N6)] [people (users) ($N5)] and [computers ($N6)]. \
+\
+Example C: \
+[Birds ($N1)] [can ($H, $N1, $N2)] [fly ($N2)] because of [adaptations like ($H, $N3, $N4; $H, $N3, $N8)] [lightweight bones ($N4)] and [wing structure ($N8)] that are specifically [designed for ($H, $N4, $N2; $H, $N8, $N2)] [flight ($N2)]. \
+\
 Your response should have multiple paragraphs.`,
       },
       {
         role: 'user',
-        content: question,
+        content: filteredQuestion,
       },
     ]
   },

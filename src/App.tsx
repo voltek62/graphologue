@@ -167,16 +167,10 @@ export const ChatApp = () => {
             <div className="public-information">
               <a href="https://doi.org/10.1145/3586183.3606737">paper</a>
               <a href="https://arxiv.org/abs/2305.11473">arXiv</a>
-              <a href="https://youtu.be/92QREkwrwRQ?si=8ofdvGw5AVMcSmwK">
-                video
+              <a href="https://github.com/voltek62/graphologue">github</a>
+              <a href="https://www.datamarketinglabs.com/">
+                data marketing labs
               </a>
-              <a href="https://github.com/ucsd-creativitylab/graphologue">
-                github
-              </a>
-              <a href="https://github.com/ucsd-creativitylab/graphologue/blob/public/src/utils/prompts.ts">
-                show me your prompts
-              </a>
-              <a href="https://creativity.ucsd.edu">creativity lab</a>
             </div>
           </div>
           {openAIKey.length === 0 ? (
