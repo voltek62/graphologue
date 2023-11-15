@@ -19,8 +19,9 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
             cd ~/graphologue
-            export NODE_ENV=production
             pm2 stop graphologue
+            pm2 delete graphologue
+            rm -rf node_modules package-lock.json
             git pull origin public
             git status
             npm install

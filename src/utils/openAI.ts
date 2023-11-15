@@ -56,17 +56,21 @@ export const getCompletionOptions = (
 }
 
 const getRequestOptions = (options: any) => {
+  // Obtenez l'URL actuelle
+  const currentURL = window.location.hostname
+  console.log(currentURL)
+
+  // Déterminez quelle clé API utiliser
+  const apiKey =
+    currentURL === 'localhost'
+      ? process.env.REACT_APP_OPENAI_API_KEY
+      : userProvidedAPIKey.current
+
   return {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization:
-        'Bearer ' +
-        String(
-          debug
-            ? process.env.REACT_APP_OPENAI_API_KEY
-            : userProvidedAPIKey.current,
-        ),
+      Authorization: 'Bearer ' + String(apiKey),
     },
     body: JSON.stringify(options),
   }
