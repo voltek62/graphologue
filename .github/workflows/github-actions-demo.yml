@@ -1,10 +1,6 @@
 name: remote ssh command
 on: [push]
 
-env:
-  FOO: "BAR"
-  BAR: "FOO"
-
 jobs:
 
   testing01:
@@ -25,6 +21,5 @@ jobs:
             cd ~/graphologue
             pm2 stop graphologue
             git pull origin public
-            git status
             npm install
             pm2 start npm --name 'graphologue' -- start
