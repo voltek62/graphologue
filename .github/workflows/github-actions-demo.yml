@@ -19,6 +19,7 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
             cd ~/graphologue
+            export NODE_ENV=production
             pm2 stop graphologue
             git pull origin public
             git status
