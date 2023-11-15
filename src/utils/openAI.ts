@@ -58,7 +58,6 @@ export const getCompletionOptions = (
 const getRequestOptions = (options: any) => {
   // Obtenez l'URL actuelle
   const currentURL = window.location.hostname
-  console.log(currentURL)
 
   // Déterminez quelle clé API utiliser
   const apiKey =

@@ -24,5 +24,6 @@ jobs:
             rm -rf node_modules package-lock.json
             git pull origin public
             git status
+            node -v
             npm install
             pm2 start npm --name 'graphologue' -- start
